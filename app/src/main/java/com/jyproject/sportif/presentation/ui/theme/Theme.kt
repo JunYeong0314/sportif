@@ -1,4 +1,4 @@
-package com.jyproject.sportif.ui.theme
+package com.jyproject.sportif.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -65,6 +65,23 @@ fun SportifTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        content = content
+    )
+}
+
+@Composable
+fun CustomTheme(
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable() () -> Unit
+) {
+    val colors = if (!useDarkTheme) {
+        LightColorScheme
+    } else {
+        DarkColorScheme
+    }
+
+    MaterialTheme(
+        colorScheme = colors,
         content = content
     )
 }

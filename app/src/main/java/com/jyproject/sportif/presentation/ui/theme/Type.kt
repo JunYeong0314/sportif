@@ -1,4 +1,4 @@
-package com.jyproject.sportif.ui.theme
+package com.jyproject.sportif.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

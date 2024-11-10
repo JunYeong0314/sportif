@@ -1,6 +1,9 @@
 plugins {
+    id("com.google.devtools.ksp")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -66,4 +69,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation (libs.androidx.navigation.compose)
+
+    // hilt
+    implementation(libs.hilt.android)
+    implementation(libs.compose.hilt.navigation)
+    ksp(libs.hilt.compiler)
+
+    // retrofit
+    implementation (libs.retrofit)
+
+    // Okhttp
+    implementation (libs.okhttp)
 }
