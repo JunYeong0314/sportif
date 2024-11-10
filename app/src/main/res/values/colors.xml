@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="app_base">#000000</color>
     <color name="light_gray_hard1">#FF8F8F8F</color>
+    <color name="light_gray_weak1">#F4F3F3</color>
 </resources>

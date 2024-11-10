@@ -82,4 +82,10 @@ dependencies {
 
     // Okhttp
     implementation (libs.okhttp)
+
+    // coroutine
+    implementation(libs.kotlin.coroutines.play)
+
+    // Lottie
+    implementation(libs.lottie.compose)
 }
