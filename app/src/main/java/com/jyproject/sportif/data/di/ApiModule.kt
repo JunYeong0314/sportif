@@ -1,5 +1,6 @@
 package com.jyproject.sportif.data.di
 
+import com.jyproject.sportif.data.remote.service.searchFacility.SearchFacilityService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,5 +37,11 @@ class ApiModule {
             .client(getSeoulOkHttpClient())
             .baseUrl(SEOUL_URL)
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSearchFacility(@SeoulRetrofit retrofit: Retrofit): SearchFacilityService {
+        return  retrofit.create(SearchFacilityService::class.java)
     }
 }
