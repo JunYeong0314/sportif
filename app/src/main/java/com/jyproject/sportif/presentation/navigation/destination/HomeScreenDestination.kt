@@ -22,7 +22,7 @@ fun HomeScreenDestination(
         onEffectSend = { effect ->
             when(effect) {
                 is HomeContract.Effect.Navigation.ToSearchFacility -> {
-                    navController.navigate(Navigation.Routes.SEARCH_FACILITY)
+                    navController.navigate(Navigation.Routes.SELECT_CITY)
                 }
                 is HomeContract.Effect.Navigation.ToSearchChair -> {
                     navController.navigate(Navigation.Routes.SEARCH_CHAIR)

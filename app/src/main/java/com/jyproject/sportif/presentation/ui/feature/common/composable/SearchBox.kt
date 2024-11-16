@@ -1,5 +1,6 @@
 package com.jyproject.sportif.presentation.ui.feature.common.composable
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -23,7 +24,8 @@ fun SearchBox(
     focusManager: FocusManager,
     value: String,
     hint: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    onClickSearch: () -> Unit
 ){
     Row(
         modifier = modifier,
@@ -46,7 +48,9 @@ fun SearchBox(
             )
         )
         Icon(
-            modifier = Modifier.weight(0.1f),
+            modifier = Modifier
+                .weight(0.1f)
+                .clickable { onClickSearch() },
             imageVector = Icons.Default.Search,
             contentDescription = null,
             tint = Color.DarkGray

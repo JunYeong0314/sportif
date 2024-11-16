@@ -84,6 +84,7 @@ dependencies {
 
     // Okhttp
     implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
 
     // coroutine
     implementation(libs.kotlin.coroutines.play)

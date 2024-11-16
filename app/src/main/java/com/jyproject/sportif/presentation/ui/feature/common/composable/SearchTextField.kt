@@ -45,7 +45,7 @@ fun SearchTextField(
                     Text(
                         text = hint,
                         color = colorResource(id = R.color.light_gray_hard1),
-                        fontSize = 16.sp
+                        fontSize = 14.sp
                     )
                 }
             }
