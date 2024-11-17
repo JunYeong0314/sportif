@@ -23,17 +23,18 @@ class SearchFacilityViewModel @Inject constructor(
             is SearchFacilityContract.Event.SearchFacility -> searchFacility(
                 city = event.city,
                 region = event.region,
-                facilityName = event.facilityName
+                facilityName = event.facilityName,
+                pageNo = event.pageNo
             )
         }
     }
 
-    private fun searchFacility(city: String, region: String?, facilityName: String?) {
+    private fun searchFacility(city: String, region: String?, facilityName: String?, pageNo: Int = 1) {
         setState { copy(searchFacilityState = searchFacilityState.copy(isLoading = true)) }
 
         viewModelScope.launch {
             searchFacilityRepository.searchFacility(
-                pageNo = 1,
+                pageNo = pageNo,
                 numOfRows = 10,
                 cityNm = city,
                 localNm = region,
