@@ -54,11 +54,11 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .padding(horizontal = 18.dp, vertical = 8.dp)
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp, vertical = 8.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
             SearchButton(

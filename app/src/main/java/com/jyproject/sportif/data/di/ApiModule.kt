@@ -1,5 +1,6 @@
 package com.jyproject.sportif.data.di
 
+import com.jyproject.sportif.data.remote.service.searchChair.SearchChairService
 import com.jyproject.sportif.data.remote.service.searchFacility.SearchFacilityService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -11,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -18,7 +20,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class ApiModule {
     companion object {
-        const val SEOUL_URL = "https://apis.data.go.kr/B551014/SRVC_OD_API_FACIL_MNG_DVOUCHER/"
+        const val SEOUL_URL = "https://apis.data.go.kr/B551014/"
     }
 
     @Qualifier
@@ -54,6 +56,12 @@ class ApiModule {
     @Singleton
     @Provides
     fun provideSearchFacility(@SeoulRetrofit retrofit: Retrofit): SearchFacilityService {
-        return  retrofit.create(SearchFacilityService::class.java)
+        return retrofit.create(SearchFacilityService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSearchChair(@SeoulRetrofit retrofit: Retrofit): SearchChairService {
+        return retrofit.create(SearchChairService::class.java)
     }
 }

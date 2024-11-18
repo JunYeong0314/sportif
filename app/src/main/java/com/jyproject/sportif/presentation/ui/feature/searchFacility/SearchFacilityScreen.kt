@@ -20,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -49,18 +51,20 @@ import com.jyproject.sportif.presentation.ui.feature.common.composable.BaseTopBa
 import com.jyproject.sportif.presentation.ui.feature.common.composable.SearchBox
 import com.jyproject.sportif.presentation.ui.feature.common.define.ExtensionFunctionDefines.shimmerEffect
 import com.jyproject.sportif.presentation.ui.feature.common.define.ExtensionFunctionDefines.simpleVerticalScrollbar
+import com.jyproject.sportif.presentation.ui.feature.searchFacility.selectCity.SelectCityContract
 import com.jyproject.sportif.presentation.ui.theme.CustomTheme
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchFacilityScreen(
     city: String,
     state: SearchFacilityContract.State,
     effectFlow: Flow<SearchFacilityContract.Effect>?,
     onEventSend: (event: SearchFacilityContract.Event) -> Unit,
-    onEffectSend: (event: SearchFacilityContract.Effect) -> Unit
+    onEffectSend: (effect: SearchFacilityContract.Effect) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     var searchRegionText by remember {
@@ -82,6 +86,24 @@ fun SearchFacilityScreen(
         mutableStateListOf<Item>()
     }
 
+    var showBottomSheet by remember {
+        mutableStateOf(false)
+    }
+
+    var clickedFacilityCard by remember {
+        mutableStateOf<Item?>(null)
+    }
+
+    LaunchedEffect(effectFlow) {
+        effectFlow?.collect { effect ->
+            when (effect) {
+                is SearchFacilityContract.Effect.Navigation.ToBack -> onEffectSend(
+                    SearchFacilityContract.Effect.Navigation.ToBack
+                )
+            }
+        }
+    }
+
     LaunchedEffect(state.searchFacilityState.isSuccess, state.searchFacilityState.errorMessage) {
         if (state.searchFacilityState.isSuccess == false && state.searchFacilityState.errorMessage != null) {
             snackbarHostState.showSnackbar(
@@ -97,6 +119,46 @@ fun SearchFacilityScreen(
         newItems?.let {
             searchResultList.addAll(newItems)
             isLoadingMoreData = false
+        }
+    }
+
+    if(showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showBottomSheet = false },
+            containerColor = Color.White
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
+                    .fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "시설 정보",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "시설명: ${clickedFacilityCard?.facilNm}",
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "주소: ${clickedFacilityCard?.roadAddr} ${clickedFacilityCard?.faciDaddr}",
+                    fontSize = 14.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "전화번호: ${clickedFacilityCard?.resTelno}",
+                    fontSize = 14.sp,
+                )
+                Spacer(modifier = Modifier.size(62.dp))
+            }
         }
     }
 
@@ -219,8 +281,9 @@ fun SearchFacilityScreen(
 
                         SearchResultCardWidget(
                             resultData = item,
-                            onClickCard = {
-
+                            onClickCard = { clickedItem ->
+                                clickedFacilityCard = clickedItem
+                                showBottomSheet = true
                             }
                         )
 

@@ -23,6 +23,7 @@ import com.jyproject.sportif.presentation.anim.horizontallyAnimatedComposableArg
 import com.jyproject.sportif.presentation.anim.noAnimatedComposable
 import com.jyproject.sportif.presentation.anim.verticallyAnimatedComposable
 import com.jyproject.sportif.presentation.navigation.destination.HomeScreenDestination
+import com.jyproject.sportif.presentation.navigation.destination.searchChair.SearchChairScreenDestination
 import com.jyproject.sportif.presentation.navigation.destination.searchFacility.SearchFacilityScreenDestination
 import com.jyproject.sportif.presentation.navigation.destination.searchFacility.SelectCityScreenDestination
 import com.jyproject.sportif.presentation.ui.feature.common.util.BottomBar
@@ -78,6 +79,10 @@ fun AppNavigation(
                         "Require city"
                     }
                 SearchFacilityScreenDestination(city = city, navController = navController)
+            }
+            
+            verticallyAnimatedComposable(route = Navigation.Routes.SEARCH_CHAIR) {
+                SearchChairScreenDestination(navController = navController)
             }
         }
     }

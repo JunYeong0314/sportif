@@ -8,7 +8,7 @@ import retrofit2.http.Query
 import java.net.URLEncoder
 
 interface SearchFacilityService {
-    @GET("TODZ_API_MNG_DVOUCHER_I")
+    @GET("SRVC_OD_API_FACIL_MNG_DVOUCHER/TODZ_API_MNG_DVOUCHER_I")
     suspend fun getSearchFacility(
         @Query("serviceKey") serviceKey: String,
         @Query("resultType") resultType: String,
