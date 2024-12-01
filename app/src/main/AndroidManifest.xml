@@ -20,6 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Sportif"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${NAVER_MAP_CLIENT_ID}"/>
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_TYPE"
+            android:value="gov" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,6 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

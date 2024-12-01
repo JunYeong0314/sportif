@@ -1,6 +1,8 @@
 package com.jyproject.sportif.presentation.navigation
 
+import android.Manifest
 import android.content.Context
+import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -31,7 +33,6 @@ import com.jyproject.sportif.presentation.ui.feature.common.util.TopBar
 
 @Composable
 fun AppNavigation(
-    context: Context
 ) {
     val navController = rememberNavController()
     val items = listOf(
@@ -46,6 +47,7 @@ fun AppNavigation(
     navController.addOnDestinationChangedListener { _, destination, _ ->
         isBar = destination.route in routesWithoutBar
     }
+
 
     Scaffold(
         bottomBar = { if (isBar) BottomBar(navController = navController, items = items) },

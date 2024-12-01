@@ -8,6 +8,8 @@ class HomeContract {
     sealed class Event: ViewEvent {
         data object NavigationToSearchFacility: Event()
         data object NavigationToSearchChair: Event()
+        data class GetGeocode(val latitude: Double, val longitude: Double): Event()
+        data class GetNearSportFacility(val city: String, val district: String): Event()
     }
 
     data class State(val homeState: HomeState): ViewState

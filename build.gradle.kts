@@ -3,6 +3,9 @@ buildscript {
     repositories{
         google()
         mavenCentral()
+        maven {
+            url = uri("https://repository.map.naver.com/archive/maven")
+        }
     }
     dependencies {
         classpath(libs.gradle)

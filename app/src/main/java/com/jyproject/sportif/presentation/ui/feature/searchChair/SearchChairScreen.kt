@@ -17,6 +17,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jyproject.sportif.R
@@ -43,6 +47,7 @@ import com.jyproject.sportif.presentation.ui.feature.searchFacility.SearchFacili
 import com.jyproject.sportif.presentation.ui.feature.searchFacility.SkeletonWidget
 import kotlinx.coroutines.flow.Flow
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchChairScreen(
     state: SearchChairContract.State,
@@ -64,6 +69,13 @@ fun SearchChairScreen(
     }
     val searchResultList = remember {
         mutableStateListOf<Item>()
+    }
+
+    var showBottomSheet by remember {
+        mutableStateOf(false)
+    }
+    var clickedChairCard by remember {
+        mutableStateOf<Item?>(null)
     }
 
     LaunchedEffect(effectFlow) {
@@ -92,6 +104,46 @@ fun SearchChairScreen(
         newItems?.let {
             searchResultList.addAll(newItems)
             isLoadingMoreData = false
+        }
+    }
+
+    if(showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showBottomSheet = false },
+            containerColor = Color.White
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 12.dp)
+                    .fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "강좌 정보",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "강좌명: ${clickedChairCard?.courseNm} / 강좌 번호: ${clickedChairCard?.courseNum}",
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "사업자 번호: ${clickedChairCard?.busiRegNo}",
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "요일 정보: ${getDayFromChar("${clickedChairCard?.weekday}")}",
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+            }
         }
     }
 
@@ -162,8 +214,7 @@ fun SearchChairScreen(
                 val listState = rememberLazyListState()
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
+                        .fillMaxWidth(),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Column {
@@ -186,7 +237,13 @@ fun SearchChairScreen(
                             items(searchResultList.size) { index ->
                                 val item = searchResultList[index]
 
-                                Text(text = "${item.courseNm}")
+                                SearchChairCardWidget(
+                                    data = item,
+                                    onClickCard = { clickItem ->
+                                        clickedChairCard = clickItem
+                                        showBottomSheet = true
+                                    }
+                                )
 
                                 if (index == searchResultList.lastIndex && !isLoadingMoreData && index < totalCount - 1 &&
                                     currentPage * 10 <= totalCount && !state.searchChairState.isLoading
@@ -227,6 +284,46 @@ fun SearchChairScreen(
             }
         }
     }
+}
 
+@Composable
+private fun SearchChairCardWidget(
+    data: Item,
+    onClickCard: (Item) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+            .clickable { onClickCard(data) },
+        horizontalAlignment = Alignment.Start
+    ) {
+        Text(
+            text = "강좌 코스명: ${data.courseNm}",
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = "시작시간: ${data.startTime} 종료시간: ${data.endTime}",
+            fontSize = 12.sp,
+            color = colorResource(id = R.color.light_gray_hard1),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
 
+private fun getDayFromChar(dayMask: String): String {
+    val days = listOf("월", "화", "수", "목", "금", "토", "일")
+
+    val activeDays = days.filterIndexed { index, _ -> dayMask[index] == '1' }
+
+    return if (activeDays.isNotEmpty()) {
+        activeDays.joinToString(" ")
+    } else {
+        "해당 요일 없음"
+    }
 }
