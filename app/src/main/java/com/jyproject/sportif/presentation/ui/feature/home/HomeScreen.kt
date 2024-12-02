@@ -6,6 +6,7 @@ import android.location.Location
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +39,8 @@ import com.google.android.gms.location.LocationServices
 import com.jyproject.sportif.R
 import com.jyproject.sportif.presentation.anim.LottieBook
 import com.jyproject.sportif.presentation.anim.LottieSearch
+import com.jyproject.sportif.presentation.ui.feature.StaticStore
+import com.jyproject.sportif.presentation.ui.feature.common.define.ExtensionFunctionDefines.shimmerEffect
 import com.jyproject.sportif.presentation.ui.feature.home.composable.SearchButton
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -80,8 +83,10 @@ fun HomeScreen(
                 is HomeContract.Effect.Navigation.ToSearchFacility -> {
                     onEffectSend(effect)
                 }
-
                 is HomeContract.Effect.Navigation.ToSearchChair -> {
+                    onEffectSend(effect)
+                }
+                is HomeContract.Effect.Navigation.ToMapDetail -> {
                     onEffectSend(effect)
                 }
             }
@@ -91,6 +96,7 @@ fun HomeScreen(
     LaunchedEffect(permissionGranted) {
         fusedLocationClient.lastLocation.addOnSuccessListener { locationResult ->
             locationResult?.let {
+                StaticStore.currentLocation = LatLng(it.latitude, it.longitude)
                 location = it
                 onEventSend(
                     HomeContract.Event.GetGeocode(
@@ -195,11 +201,14 @@ fun HomeScreen(
                 cameraPositionState = CameraPositionState(
                     position = CameraPosition(
                         LatLng(
-                            location!!.latitude,
-                            location!!.longitude
+                            location?.latitude ?: StaticStore.currentLocation?.latitude ?: 0.0,
+                            location?.longitude ?: StaticStore.currentLocation?.longitude ?: 0.0
                         ), 11.0
                     )
-                )
+                ),
+                onMapClick = { _, _ ->
+                    onEventSend(HomeContract.Event.NavigationToMapDetail)
+                }
             ) {
                 state.homeState.nearSportFacilityData?.map {
                     Marker(
@@ -211,8 +220,15 @@ fun HomeScreen(
                 }
             }
         }else {
-            Text(text = "로드중..")
+            Box(
+                modifier = Modifier
+                    .height(250.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .shimmerEffect(8.dp),
+            )
         }
+
     }
 
 }

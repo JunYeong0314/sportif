@@ -4,8 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,6 +31,12 @@ fun TopBar() {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Image(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(id = R.drawable.ic_app_icon),
+            contentDescription = "appIcon"
+        )
+        Spacer(modifier = Modifier.width(4.dp))
         Text(text = "Sportif", style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold))
     }
 }

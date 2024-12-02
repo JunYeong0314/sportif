@@ -27,6 +27,9 @@ fun HomeScreenDestination(
                 is HomeContract.Effect.Navigation.ToSearchChair -> {
                     navController.navigate(Navigation.Routes.SEARCH_CHAIR)
                 }
+                is HomeContract.Effect.Navigation.ToMapDetail -> {
+                    navController.navigate(Navigation.Routes.MAP_DETAIL)
+                }
             }
         }
     )

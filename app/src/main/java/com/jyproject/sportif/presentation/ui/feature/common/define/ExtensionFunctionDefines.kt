@@ -38,7 +38,7 @@ object ExtensionFunctionDefines {
             initialValue = -2 * size.width.toFloat(),
             targetValue = 2 * size.width.toFloat(),
             animationSpec = infiniteRepeatable(
-                animation = tween(1000)
+                animation = tween(3000)
             ),
             label = ""
         )
@@ -47,7 +47,7 @@ object ExtensionFunctionDefines {
             brush = Brush.linearGradient(
                 colors = listOf(
                     Color(0xFFEFF0F1),
-                    Color(0xFFE0E0E0),
+                    Color(0xFFE2E2E2),
                     Color(0xFFEFF0F1)
                 ),
                 start = Offset(startOffsetX, 0f),

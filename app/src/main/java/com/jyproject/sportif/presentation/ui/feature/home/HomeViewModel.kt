@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.jyproject.sportif.data.features.naverMapGeocode.NaverMapRepository
 import com.jyproject.sportif.data.features.searchFacility.SearchFacilityRepository
+import com.jyproject.sportif.presentation.ui.feature.StaticStore
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ class HomeViewModel @Inject constructor(
             is HomeContract.Event.GetNearSportFacility -> {
                 getNearbySportCenterData(city = event.city, district = event.district)
             }
+            is HomeContract.Event.NavigationToMapDetail -> setEffect { HomeContract.Effect.Navigation.ToMapDetail }
         }
     }
 
@@ -67,11 +69,10 @@ class HomeViewModel @Inject constructor(
 
             searchFacilityRepository.searchNearSportFacility(
                 pageNo = 1,
-                numOfRows = 1000,
+                numOfRows = 10000,
                 city = city,
                 district = trimmedDistrict
             ).onSuccess {
-                Log.d("테스트", "$city $district ")
                 it?.response?.body?.items?.item?.let { list ->
                     val mappingData = list.map { data->
                         LatLng(data?.faciLat?.toDouble() ?: 0.0, data?.faciLot?.toDouble() ?: 0.0)
@@ -79,6 +80,7 @@ class HomeViewModel @Inject constructor(
                     setState {
                         copy(homeState = homeState.copy(isLoading = false, nearSportFacilityData = mappingData))
                     }
+                    StaticStore.facilityData = list
                 }
             }.onFailure {
                 setState {

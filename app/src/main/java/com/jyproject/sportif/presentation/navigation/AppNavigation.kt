@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +26,8 @@ import com.jyproject.sportif.presentation.anim.horizontallyAnimatedComposableArg
 import com.jyproject.sportif.presentation.anim.noAnimatedComposable
 import com.jyproject.sportif.presentation.anim.verticallyAnimatedComposable
 import com.jyproject.sportif.presentation.navigation.destination.HomeScreenDestination
+import com.jyproject.sportif.presentation.navigation.destination.chat.ChatScreenDestination
+import com.jyproject.sportif.presentation.navigation.destination.mapDetail.MapDetailScreenDestination
 import com.jyproject.sportif.presentation.navigation.destination.searchChair.SearchChairScreenDestination
 import com.jyproject.sportif.presentation.navigation.destination.searchFacility.SearchFacilityScreenDestination
 import com.jyproject.sportif.presentation.navigation.destination.searchFacility.SelectCityScreenDestination
@@ -36,7 +39,7 @@ fun AppNavigation(
 ) {
     val navController = rememberNavController()
     val items = listOf(
-        Screen.Home, Screen.MyPage
+        Screen.Home, Screen.Chat
     )
     // 상/하단바 보일 화면 리스트
     val routesWithoutBar = listOf(
@@ -69,6 +72,10 @@ fun AppNavigation(
                     navController = navController
                 )
             }
+            
+            verticallyAnimatedComposable(route = Navigation.Routes.CHAT) {
+                ChatScreenDestination(navController = navController)
+            }
 
             horizontallyAnimatedComposableArguments(
                 route = "${Navigation.Routes.SEARCH_FACILITY}/{${Navigation.Args.SEARCH_FACILITY_NAME}}",
@@ -86,6 +93,10 @@ fun AppNavigation(
             verticallyAnimatedComposable(route = Navigation.Routes.SEARCH_CHAIR) {
                 SearchChairScreenDestination(navController = navController)
             }
+
+            verticallyAnimatedComposable(route = Navigation.Routes.MAP_DETAIL) {
+                MapDetailScreenDestination(navController = navController)
+            }
         }
     }
 }
@@ -96,5 +107,5 @@ fun NavController.navigateToSearchFacility(city: String) {
 
 sealed class Screen(val route: String, val icon: ImageVector) {
     data object Home : Screen("home", icon = Icons.Filled.Home)
-    data object MyPage : Screen("mypage", icon = Icons.Filled.Person)
+    data object Chat : Screen("chat", icon = Icons.Default.Send)
 }

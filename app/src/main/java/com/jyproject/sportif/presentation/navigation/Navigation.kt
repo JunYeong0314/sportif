@@ -8,8 +8,10 @@ object Navigation {
 
     object Routes {
         const val HOME = "home"
+        const val CHAT = "chat"
         const val SELECT_CITY = "selectCity"
         const val SEARCH_FACILITY = "searchFacility"
         const val SEARCH_CHAIR = "searchChair"
+        const val MAP_DETAIL = "mapDetail"
     }
 }
