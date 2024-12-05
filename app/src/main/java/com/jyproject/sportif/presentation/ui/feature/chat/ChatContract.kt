@@ -7,6 +7,7 @@ import ViewState
 class ChatContract {
     sealed class Event: ViewEvent {
         data object NavigationToBack: Event()
+        data class Question(val question: Chat): Event()
 
     }
 

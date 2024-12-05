@@ -25,6 +25,7 @@ class ApiModule {
     companion object {
         const val SEOUL_URL = "https://apis.data.go.kr/B551014/"
         const val NAVER_MAP_URL = "https://naveropenapi.apigw.ntruss.com/"
+        const val CHAT_URL = "https://d263-59-15-203-189.ngrok-free.app/"
     }
 
     private val naverMapHeader = mapOf(
@@ -39,6 +40,10 @@ class ApiModule {
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
     annotation class NaverMapRetrofit
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class ChatRetrofit
 
     @SeoulRetrofit
     @Singleton
@@ -60,6 +65,17 @@ class ApiModule {
                 level = HttpLoggingInterceptor.Level.BODY
             })
             .addInterceptor(OkhttpInterceptor(naverMapHeader))
+            .build()
+    }
+
+    @ChatRetrofit
+    @Singleton
+    @Provides
+    fun getChatOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .build()
     }
 
@@ -90,6 +106,21 @@ class ApiModule {
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(NAVER_MAP_URL)
+            .build()
+    }
+
+    @ChatRetrofit
+    @Singleton
+    @Provides
+    fun getChatInstance(@ChatRetrofit okHttpClient: OkHttpClient): Retrofit {
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+        return Retrofit.Builder()
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(CHAT_URL)
             .build()
     }
 

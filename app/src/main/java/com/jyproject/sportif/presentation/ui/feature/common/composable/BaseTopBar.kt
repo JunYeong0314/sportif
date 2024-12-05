@@ -23,11 +23,12 @@ import com.jyproject.sportif.R
 
 @Composable
 fun BaseTopBar(
+    modifier: Modifier = Modifier,
     title: String? = null,
     onClickBackButton: () -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
         contentAlignment = Alignment.Center
